@@ -69,6 +69,7 @@
   with_items:
   - "{{ ansible_hostname }}"
   - 127.0.0.1
+  - ::1
   - localhost
 
 - name: Ensure anonymous users are not in the database
