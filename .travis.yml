@@ -33,9 +33,9 @@ script:
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
   # cat /root/.my.cnf
-  - "cat /root/.my.cnf"
+  - "sudo cat /root/.my.cnf"
   # get mysql version
-  - "mysql -e 'SELECT VERSION();'"
+  - "sudo mysql -e 'SELECT VERSION();'"
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
