@@ -16,10 +16,13 @@
     state: present
 
 - name: Update apt cache
-  apt: update_cache=yes
+  apt:
+    update_cache: yes
 
 - name: Install percona database server
-  action: apt pkg={{ item }} state=latest
+  apt:
+    pkg: "{{ item }}"
+    state: latest
   with_items:
   - "percona-server-server-{{ percona_mysql_version }}"
   - "percona-server-client-{{ percona_mysql_version }}"
@@ -37,10 +40,10 @@
 - name: Update MySQL root password
   mysql_user:
     name: root
-    host: {{ item }}
-    password: {{ percona_mysql_root_password }}
+    host: "{{ item }}"
+    password: "{{ percona_mysql_root_password }}"
     login_user: root
-    login_password: {{ percona_mysql_root_password }}
+    login_password: "{{ percona_mysql_root_password }}"
     check_implicit_admin: yes
   with_items:
   - "{{ ansible_hostname }}"
@@ -50,7 +53,7 @@
 - name: Ensure anonymous users are not in the database
   mysql_user:
     name: ''
-    host: {{ item }}
+    host: "{{ item }}"
     state: absent
   with_items:
   - "{{ ansible_hostname }}"
