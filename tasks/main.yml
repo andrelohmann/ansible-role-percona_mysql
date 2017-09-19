@@ -63,9 +63,9 @@
     name: root
     host: "{{ item }}"
     password: "{{ percona_mysql_root_password }}"
-    login_user: root
-    login_password: "{{ percona_mysql_root_password }}"
-    check_implicit_admin: yes
+    #login_user: root
+    #login_password: "{{ percona_mysql_root_password }}"
+    #check_implicit_admin: yes
   with_items:
   - "{{ ansible_hostname }}"
   - 127.0.0.1
