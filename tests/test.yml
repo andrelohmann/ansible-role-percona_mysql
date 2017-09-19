@@ -1,10 +1,10 @@
 ---
 - hosts: localhost
-  remote_user: root
+  become: true
   vars:
     percona_mysql_version: '5.7'
     percona_mysql_root_password: SOMELONGTESTPASSWORD
 
   roles:
-    - ansible-role-percona_mysql
+  - ansible-role-percona_mysql
 ...
