@@ -1,6 +1,7 @@
 ---
 - hosts: localhost
   become: true
+  become_user: root
   vars:
     percona_mysql_version: '5.7'
     percona_mysql_root_password: SOMELONGTESTPASSWORD
