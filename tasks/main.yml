@@ -37,6 +37,11 @@
   - percona-xtrabackup
   - python-mysqldb
 
+- name: Start mysql server
+  service:
+    name: mysql
+    state: started
+
 - name: Update MySQL root password
   mysql_user:
     name: root
