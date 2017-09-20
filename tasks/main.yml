@@ -1,35 +1,16 @@
 ---
 
-#- name: Obtaining percona public key
-#  apt_key:
-#    url: 'http://www.percona.com/downloads/RPM-GPG-KEY-percona'
-#    state: present
-#
-#- name: Adding percona repository
-#  apt_repository:
-#    repo: "deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
-#    state: present
-#
-#- name: Adding percona source repository
-#  apt_repository:
-#    repo: "deb-src http://repo.percona.com/apt {{ ansible_distribution_release }} main"
-#    state: present
-# tasks file for percona-mysql
+- name: Install percona key
+  apt_key:
+    keyserver: keys.gnupg.net
+    id: 1C4CBDCDCD2EFD2A
+    state: present
 
 - name: Add Percona repository key
   apt_key:
     keyserver: keys.gnupg.net
     id: 9334A25F8507EFA5
     state: present
-#    - name: Install percona key
-#      apt_key:
-#        keyserver: keys.gnupg.net
-#        id: 1C4CBDCDCD2EFD2A
-#        state: present
-
-#- name: Add Percona repository
-#  apt:
-#    deb: "https://repo.percona.com/apt/percona-release_0.1-4.{{ansible_distribution_release}}_all.deb"
 
 - name: Adding percona repository
   apt_repository:
@@ -62,8 +43,7 @@
     host: "{{ item }}"
     password: "{{ percona_mysql_root_password }}"
     login_user: root
-    login_password: no
-#    login_password: "{{ percona_mysql_root_password }}"
+    login_password: "{{ percona_mysql_root_password }}"
     check_implicit_admin: yes
   with_items:
   - "{{ ansible_hostname }}"
