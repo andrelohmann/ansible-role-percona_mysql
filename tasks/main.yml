@@ -21,6 +21,11 @@
     keyserver: keys.gnupg.net
     id: 9334A25F8507EFA5
     state: present
+#    - name: Install percona key
+#      apt_key:
+#        keyserver: keys.gnupg.net
+#        id: 1C4CBDCDCD2EFD2A
+#        state: present
 
 #- name: Add Percona repository
 #  apt:
