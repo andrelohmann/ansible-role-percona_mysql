@@ -35,7 +35,7 @@
   - "percona-server-client-{{ percona_mysql_version }}"
   - percona-toolkit
   - percona-xtrabackup
-  - python-mysqldb
+#  - python-mysqldb
 
 - name: Start mysql server
   service:
