@@ -51,19 +51,20 @@
   - percona-xtrabackup
   - python-mysqldb
 
-#- name: Update MySQL root password
-#  mysql_user:
-#    name: root
-#    host: "{{ item }}"
-#    password: "{{ percona_mysql_root_password }}"
-#    login_user: root
+- name: Update MySQL root password
+  mysql_user:
+    name: root
+    host: "{{ item }}"
+    password: "{{ percona_mysql_root_password }}"
+    login_user: root
+    login_password: no
 #    login_password: "{{ percona_mysql_root_password }}"
-#    check_implicit_admin: yes
-#  with_items:
-#  - "{{ ansible_hostname }}"
-#  - 127.0.0.1
-#  - ::1
-#  - localhost
+    check_implicit_admin: yes
+  with_items:
+  - "{{ ansible_hostname }}"
+  - "127.0.0.1"
+  - "::1"
+  - "localhost"
 
 - name: Copy .my.cnf file into the root home folder
   template:
