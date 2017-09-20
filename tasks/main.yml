@@ -73,6 +73,8 @@
 #    mode: 0600
 
 - name: Ensure anonymous users are not in the database
+  become: true
+  become_user: root
   mysql_user:
     name: ''
     host: "{{ item }}"
