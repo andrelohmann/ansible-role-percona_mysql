@@ -28,7 +28,7 @@ Example Playbook
 
     - hosts: percona
       roles:
-         - { role: andrelohmann.ansible-role-percona_mysql }
+         - { role: andrelohmann.percona_mysql }
 
 License
 -------
