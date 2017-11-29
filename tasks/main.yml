@@ -43,18 +43,25 @@
     name: mysql
     state: started
 
+- name: get .my.cnf state
+  state:
+    path: /root/.my.cnf
+  register: _my_cnf
+
 - name: Update MySQL root password
   mysql_user:
     name: root
     host: "{{ item }}"
     password: "{{ percona_mysql_root_password }}"
-    #login_user: root
+    login_user: root
+    login_password: "{{ percona_mysql_root_password }}"
     check_implicit_admin: yes
   with_items:
   - "{{ ansible_hostname }}"
-  #- "127.0.0.1"
-  #- "::1"
-  #- "localhost"
+  - "127.0.0.1"
+  - "::1"
+  - "localhost"
+  when: _my_cnf.stat.exists == False
 
 - name: Copy .my.cnf file into the root home folder
   template:
@@ -62,6 +69,7 @@
     dest: /root/.my.cnf
     owner: root
     mode: 0600
+  when: _my_cnf.stat.exists == False
 
 - name: Ensure anonymous users are not in the database
   become: true
