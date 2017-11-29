@@ -44,7 +44,7 @@
     state: started
 
 - name: get .my.cnf state
-  state:
+  stat:
     path: /root/.my.cnf
   register: _my_cnf
 
