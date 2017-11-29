@@ -10,6 +10,7 @@ addons:
   apt:
     packages:
     - python-pip
+    - pathon-mysqldb
 
 install:
   # Install ansible
@@ -25,7 +26,7 @@ script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo -vvv
+  #- ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo -vvv
   # Run the role/playbook again, checking to make sure it's idempotent.
   #- >
   #  ansible-playbook -i tests/inventory tests/test.yml --connection=local
