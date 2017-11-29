@@ -10,7 +10,7 @@ addons:
   apt:
     packages:
     - python-pip
-    - pathon-mysqldb
+    - python-mysqldb
 
 install:
   # Install ansible
