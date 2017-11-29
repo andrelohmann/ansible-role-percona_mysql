@@ -48,13 +48,13 @@
     name: root
     host: "{{ item }}"
     password: "{{ percona_mysql_root_password }}"
-    login_user: root
+    #login_user: root
     check_implicit_admin: yes
   with_items:
   - "{{ ansible_hostname }}"
-  - "127.0.0.1"
-  - "::1"
-  - "localhost"
+  #- "127.0.0.1"
+  #- "::1"
+  #- "localhost"
 
 - name: Copy .my.cnf file into the root home folder
   template:
