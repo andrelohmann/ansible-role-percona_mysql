@@ -25,7 +25,7 @@ script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo -vvv
+  #- ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo -vvv
   # Run the role/playbook again, checking to make sure it's idempotent.
   #- >
   #  ansible-playbook -i tests/inventory tests/test.yml --connection=local
@@ -33,9 +33,9 @@ script:
   #  && (echo 'Idempotence test: pass' && exit 0)
   #  || (echo 'Idempotence test: fail' && exit 1)
   # cat /root/.my.cnf
-  - "sudo cat /root/.my.cnf"
+  #- "sudo cat /root/.my.cnf"
   # get mysql version
-  - "sudo mysql -e 'SELECT VERSION();'"
+  #- "sudo mysql -e 'SELECT VERSION();'"
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
