@@ -30,22 +30,23 @@
 
 - name: Install percona database server
   apt:
-    pkg: "{{ item }}"
+    pkg: "{{ packages }}"
     state: latest
     dpkg_options: 'force-confnew,force-confdef'
     autoclean: yes
     autoremove: yes
     update_cache: yes
     cache_valid_time: 3600
-  with_items:
-  - "percona-server-server-{{ percona_mysql_version }}"
-  - "percona-server-client-{{ percona_mysql_version }}"
-  - percona-toolkit
-  - percona-xtrabackup
-  - python-mysqldb
+  vars:
+    packages:
+    - "percona-server-server-{{ percona_mysql_version }}"
+    - "percona-server-client-{{ percona_mysql_version }}"
+    - percona-toolkit
+    - percona-xtrabackup
+    - python-mysqldb
 
 - name: Start mysql server
-  service:
+  systemd:
     name: mysql
     state: started
 
