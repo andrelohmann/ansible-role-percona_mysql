@@ -30,7 +30,7 @@
 
 - name: Install percona database server
   apt:
-    pkg: "{{ packages }}"
+    name: "{{ packages }}"
     state: latest
     dpkg_options: 'force-confnew,force-confdef'
     autoclean: yes
