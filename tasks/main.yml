@@ -12,9 +12,15 @@
 #    id: 9334A25F8507EFA5
 #    state: present
 
+#- name: Add Percona repository key
+#  apt_key:
+#    keyserver: keyserver.ubuntu.com
+#    id: 8507EFA5
+#    state: present
+
 - name: Add Percona repository key
   apt_key:
-    keyserver: keyserver.ubuntu.com
+    keyserver: keys.gnupg.net
     id: 8507EFA5
     state: present
 
@@ -23,10 +29,10 @@
     repo: "deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
     state: present
 
-- name: Adding percona source repository
-  apt_repository:
-    repo: "deb-src http://repo.percona.com/apt {{ ansible_distribution_release }} main"
-    state: present
+#- name: Adding percona source repository
+#  apt_repository:
+#    repo: "deb-src http://repo.percona.com/apt {{ ansible_distribution_release }} main"
+#    state: present
 
 - name: Install percona database server
   apt:

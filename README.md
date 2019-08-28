@@ -28,7 +28,7 @@ Example Playbook
 
     - hosts: percona
       roles:
-         - { role: andrelohmann.percona_mysql }
+         - andrelohmann.percona_mysql
 
 License
 -------
