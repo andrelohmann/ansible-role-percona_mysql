@@ -1,23 +1,5 @@
 ---
 
-#- name: Install percona key
-#  apt_key:
-#    keyserver: keys.gnupg.net
-#    id: 1C4CBDCDCD2EFD2A
-#    state: present
-
-#- name: Add Percona repository key
-#  apt_key:
-#    keyserver: keys.gnupg.net
-#    id: 9334A25F8507EFA5
-#    state: present
-
-#- name: Add Percona repository key
-#  apt_key:
-#    keyserver: keyserver.ubuntu.com
-#    id: 8507EFA5
-#    state: present
-
 - name: Add Percona repository key
   apt_key:
     keyserver: keys.gnupg.net
@@ -28,11 +10,6 @@
   apt_repository:
     repo: "deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
     state: present
-
-#- name: Adding percona source repository
-#  apt_repository:
-#    repo: "deb-src http://repo.percona.com/apt {{ ansible_distribution_release }} main"
-#    state: present
 
 - name: Install percona database server
   apt:
@@ -49,7 +26,7 @@
     - "percona-server-client-{{ percona_mysql_version }}"
     - percona-toolkit
     - percona-xtrabackup
-    - python-mysqldb
+    - python3-mysqldb
 
 - name: Start mysql server
   systemd:
