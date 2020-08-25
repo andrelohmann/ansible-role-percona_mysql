@@ -3,7 +3,7 @@
   become: true
   become_method: sudo
   vars:
-    percona_mysql_version: '5.7'
+    percona_mysql_version: '8'
     percona_mysql_root_password: SOMELONGTESTPASSWORD
 
   roles:

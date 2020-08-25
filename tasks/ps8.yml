@@ -1,0 +1,26 @@
+---
+
+- name: Install a .deb package from the internet.
+  apt:
+    deb: "https://repo.percona.com/apt/percona-release_latest.{{ ansible_distribution_release }}_all.deb"
+
+# https://www.percona.com/doc/percona-server/LATEST/installation/apt_repo.html
+- name: Enable Percona repository
+  command: percona-release setup ps80
+
+- name: Install percona database server
+  apt:
+    name: "{{ packages }}"
+    state: latest
+    dpkg_options: 'force-confnew,force-confdef'
+    autoclean: yes
+    autoremove: yes
+    update_cache: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
+    - percona-server-server
+    - percona-server-client
+    - python3-mysqldb
+    
+...
