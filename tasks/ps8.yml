@@ -22,5 +22,5 @@
     - percona-server-server
     - percona-server-client
     - python3-mysqldb
-    
+
 ...

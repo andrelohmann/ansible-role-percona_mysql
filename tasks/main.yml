@@ -8,6 +8,16 @@
   include: ps8.yml
   when: percona_mysql_version == '8'
 
+- name: Install additional percona packages
+  apt:
+    name: "{{ percona_mysql_additional_packages }}"
+    state: latest
+    dpkg_options: 'force-confnew,force-confdef'
+    autoclean: yes
+    autoremove: yes
+    update_cache: yes
+    cache_valid_time: 3600
+
 - name: Start mysql server
   systemd:
     name: mysql

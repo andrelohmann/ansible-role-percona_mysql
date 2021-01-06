@@ -24,8 +24,6 @@
     packages:
     - "percona-server-server-{{ percona_mysql_version }}"
     - "percona-server-client-{{ percona_mysql_version }}"
-    - percona-toolkit
-    - percona-xtrabackup
     - python3-mysqldb
 
 ...
