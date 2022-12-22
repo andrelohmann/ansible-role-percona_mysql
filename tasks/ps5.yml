@@ -1,18 +1,18 @@
 ---
 
 - name: Add Percona repository key
-  apt_key:
+  ansible.builtin.apt_key:
     keyserver: keys.gnupg.net
     id: 8507EFA5
     state: present
 
 - name: Adding percona repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
     state: present
 
 - name: Install percona database server
-  apt:
+  ansible.builtin.apt:
     name: "{{ packages }}"
     state: latest
     dpkg_options: 'force-confnew,force-confdef'

@@ -1,15 +1,15 @@
 ---
 
 - name: Install percona mysql 5.*
-  include: ps5.yml
-  when: percona_mysql_version == '5.5' or percona_mysql_version == '5.6' or percona_mysql_version == '5.7'
+  include_tasks: ps5.yml
+  when: percona_mysql_version in ['5.6', '5.7']
 
 - name: Install percona mysql 8
-  include: ps8.yml
+  include_tasks: ps8.yml
   when: percona_mysql_version == '8'
 
 - name: Install additional percona packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ percona_mysql_additional_packages }}"
     state: latest
     dpkg_options: 'force-confnew,force-confdef'
@@ -19,17 +19,17 @@
     cache_valid_time: 3600
 
 - name: Start mysql server
-  systemd:
+  ansible.builtin.systemd:
     name: mysql
     state: started
 
 - name: get .my.cnf state
-  stat:
+  ansible.builtin.stat:
     path: /root/.my.cnf
   register: _my_cnf
 
 - name: Update MySQL root password
-  mysql_user:
+  community.mysql.mysql_user:
     name: root
     host: "{{ item }}"
     password: "{{ percona_mysql_root_password }}"
@@ -44,7 +44,7 @@
   when: _my_cnf.stat.exists == False
 
 - name: Copy .my.cnf file into the root home folder
-  template:
+  ansible.builtin.template:
     src: root.my.cnf.j2
     dest: /root/.my.cnf
     owner: root
@@ -54,7 +54,7 @@
 - name: Ensure anonymous users are not in the database
   become: true
   become_user: root
-  mysql_user:
+  community.mysql.mysql_user:
     name: ''
     host: "{{ item }}"
     state: absent
@@ -63,17 +63,26 @@
   - localhost
 
 - name: remove test database
-  mysql_db:
+  community.mysql.mysql_db:
     name: test
     state: absent
 
 - name: Create fnv1a_64
-  shell: /usr/bin/mysql -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'" && touch /var/log/libfnv1a_udf.so.done creates=/var/log/libfnv1a_udf.so.done
+  ansible.builtin.shell:
+    cmd: /usr/bin/mysql -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'" && touch /var/log/libfnv1a_udf.so.done
+    args:
+      creates: /var/log/libfnv1a_udf.so.done
 
 - name: Create fnv_64
-  shell: /usr/bin/mysql -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'" && touch /var/log/libfnv_udf.so.done creates=/var/log/libfnv_udf.so.done
+  ansible.builtin.shell:
+    cmd: /usr/bin/mysql -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'" && touch /var/log/libfnv_udf.so.done
+    args:
+      creates: /var/log/libfnv_udf.so.done
 
 - name: Create murmur_hash
-  shell: /usr/bin/mysql -e "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so'" && touch /var/log/libmurmur_udf.so.done creates=/var/log/libmurmur_udf.so.done
+  ansible.builtin.shell:
+    cmd: /usr/bin/mysql -e "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so'" && touch /var/log/libmurmur_udf.so.done
+    args:
+      creates: /var/log/libmurmur_udf.so.done
 
 ...

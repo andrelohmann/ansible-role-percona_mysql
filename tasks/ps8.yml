@@ -1,15 +1,15 @@
 ---
 
 - name: Install a .deb package from the internet.
-  apt:
+  ansible.builtin.apt:
     deb: "https://repo.percona.com/apt/percona-release_latest.{{ ansible_distribution_release }}_all.deb"
 
 # https://www.percona.com/doc/percona-server/LATEST/installation/apt_repo.html
 - name: Enable Percona repository
-  command: percona-release setup ps80
+  ansible.builtin.command: percona-release setup ps80
 
 - name: Install percona database server
-  apt:
+  ansible.builtin.apt:
     name: "{{ packages }}"
     state: latest
     dpkg_options: 'force-confnew,force-confdef'
