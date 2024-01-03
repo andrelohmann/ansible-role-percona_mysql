@@ -96,7 +96,7 @@ code .
 yamllint .
 ansible-lint .
 molecule create
-molecule test
+molecule test --all
 ```
 
 #### Vagrant + Virtualbox
