@@ -1,0 +1,10 @@
+---
+configs:
+  memory: "2048"
+  cpus: "2"
+  # if a specific ansible version has to be used, this can be changed from latest to e.g. "2.11.0"
+  ansible_version: "latest"
+  role_name: "ansible-role-percona_mysql"
+  ip: 192.168.56.54
+  domain: mysql.lokal
+...

@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    percona_mysql_version: '8.1'
+    percona_mysql_root_password: SOMELONGTESTPASSWORD
+  tasks:
+  - name: "Include andrelohmann.percona_mysql"
+    include_role:
+      name: "andrelohmann.percona_mysql"
+...

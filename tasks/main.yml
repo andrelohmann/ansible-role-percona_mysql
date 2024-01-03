@@ -1,0 +1,136 @@
+---
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+    dpkg_options: 'force-confnew,force-confdef'
+    autoclean: true
+    autoremove: true
+    update_cache: true
+    cache_valid_time: 3600
+  vars:
+    packages:
+    - curl
+    - gnupg2
+    - lsb-release
+
+- name: Install percona-release_latest.generic_all.deb from the internet
+  ansible.builtin.apt:
+    deb: "https://repo.percona.com/apt/percona-release_latest.generic_all.deb"
+
+# https://docs.percona.com/percona-server/8.0/apt-repo.html
+- name: Enable Percona repository
+  ansible.builtin.command: percona-release setup ps80
+  # 8.1 is currently buggy and not delivering the udf shared object files libfnv1a_udf.so, libfnv_udf.so, libmurmur_udf.so
+  # when: percona_mysql_version == '8'
+  changed_when: false
+
+# https://docs.percona.com/percona-server/innovation-release/apt-repo.html
+# 8.1 is currently buggy and not delivering the udf shared object files libfnv1a_udf.so, libfnv_udf.so, libmurmur_udf.so
+# - name: Enable Percona repository
+#   ansible.builtin.command: >
+#     percona-release enable-only ps-8x-innovation release && \
+#     percona-release enable tools release
+#   when: percona_mysql_version == '8.1'
+#   changed_when: false
+
+- name: Install percona database server
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+    dpkg_options: 'force-confnew,force-confdef'
+    autoclean: true
+    autoremove: true
+    update_cache: true
+    # we ned to invalidate cache, to enforce an apt update
+    # after percona-release applied a repository change
+    # cache_valid_time: 3600
+  vars:
+    packages:
+    - percona-server-server
+    - percona-server-client
+    - percona-toolkit
+    - python3-mysqldb
+
+- name: Install additional percona packages
+  ansible.builtin.apt:
+    name: "{{ percona_mysql_additional_packages }}"
+    state: present
+    dpkg_options: 'force-confnew,force-confdef'
+    autoclean: true
+    autoremove: true
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Start mysql server
+  ansible.builtin.systemd:
+    name: mysql
+    state: started
+
+- name: Get .my.cnf state
+  ansible.builtin.stat:
+    path: /root/.my.cnf
+  register: _my_cnf
+
+- name: Update MySQL root password
+  community.mysql.mysql_user:
+    name: root
+    host: "{{ item }}"
+    password: "{{ percona_mysql_root_password }}"
+    login_user: root
+    login_password: "{{ percona_mysql_root_password }}"
+    check_implicit_admin: true
+  with_items:
+  - "{{ ansible_hostname }}"
+  - "127.0.0.1"
+  - "::1"
+  - "localhost"
+  when: not _my_cnf.stat.exists
+
+- name: Copy .my.cnf file into the root home folder
+  ansible.builtin.template:
+    src: root.my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    mode: 0600
+  when: not _my_cnf.stat.exists
+
+- name: Ensure anonymous users are not in the database
+  become: true
+  become_user: root
+  community.mysql.mysql_user:
+    name: ''
+    host: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ ansible_hostname }}"
+  - localhost
+
+- name: Remove test database
+  community.mysql.mysql_db:
+    name: test
+    state: absent
+
+- name: Create fnv1a_64
+  ansible.builtin.shell: >
+    /usr/bin/mysql -e "CREATE FUNCTION fnv1a_64 RETURNS INTEGER SONAME 'libfnv1a_udf.so'" && touch /var/log/libfnv1a_udf.so.done
+  args:
+    executable: /bin/bash
+    creates: /var/log/libfnv1a_udf.so.done
+
+- name: Create fnv_64
+  ansible.builtin.shell: >
+    /usr/bin/mysql -e "CREATE FUNCTION fnv_64 RETURNS INTEGER SONAME 'libfnv_udf.so'" && touch /var/log/libfnv_udf.so.done
+  args:
+    executable: /bin/bash
+    creates: /var/log/libfnv_udf.so.done
+
+- name: Create murmur_hash
+  ansible.builtin.shell: >
+    /usr/bin/mysql -e "CREATE FUNCTION murmur_hash RETURNS INTEGER SONAME 'libmurmur_udf.so'" && touch /var/log/libmurmur_udf.so.done
+  args:
+    executable: /bin/bash
+    creates: /var/log/libmurmur_udf.so.done
+
+...

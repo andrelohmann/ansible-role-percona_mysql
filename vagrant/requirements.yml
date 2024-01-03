@@ -1,0 +1,9 @@
+---
+
+roles:
+- andrelohmann.root_colored_prompt
+
+collections:
+- community.mysql
+
+...
