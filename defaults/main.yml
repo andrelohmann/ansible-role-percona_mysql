@@ -1,4 +1,0 @@
----
-percona_mysql_version: '8'
-percona_mysql_additional_packages: []
-...
