@@ -1,5 +1,5 @@
 ---
-- name: Converge
+- name: Converge 8.0
   hosts: all
   vars:
     percona_mysql_version: '8'
