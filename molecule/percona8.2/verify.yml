@@ -1,0 +1,59 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+
+  - name: mysql restart
+    systemd:
+      name: mysql
+      state: restarted
+
+  - name: Get Service Status
+    ansible.builtin.systemd:
+      name: "mysql.service"
+    register: mysql_service_status
+
+  - name: Dump mysql service
+    ansible.builtin.debug:
+      var: mysql_service_status
+
+  - name: Assert mysql.service is enabled
+    ansible.builtin.assert:
+      that: mysql_service_status.status.ActiveState == "active"
+
+  - name: Run cat .my.cnf
+    ansible.builtin.shell: cat /root/.my.cnf
+    args:
+      executable: /bin/bash
+    register: my_cnf_status
+
+  - name: Dump my_cnf_status
+    ansible.builtin.debug:
+      var: my_cnf_status
+
+  - name: Assert my_cnf_status to include "SOMELONGTESTPASSWORD"
+    ansible.builtin.assert:
+      that: "'SOMELONGTESTPASSWORD' in my_cnf_status.stdout"
+
+  - name: Run SELECT VERSION();
+    ansible.builtin.shell: mysql -e 'SELECT VERSION();'
+    args:
+      executable: /bin/bash
+    register: mysql_version_status
+
+  - name: Dump mysql_version_status
+    ansible.builtin.debug:
+      var: mysql_version_status
+
+  - name: Assert mysql_version_status to include "VERSION()" and "8.2."
+    ansible.builtin.assert:
+      that:
+      - "'VERSION()' in mysql_version_status.stdout"
+      # 8.2 is currently buggy and not delivering the udf shared object files libfnv1a_udf.so, libfnv_udf.so, libmurmur_udf.so
+      # - "'8.2.' in mysql_version_status.stdout"
+      - "'8.0.' in mysql_version_status.stdout"
+
+...

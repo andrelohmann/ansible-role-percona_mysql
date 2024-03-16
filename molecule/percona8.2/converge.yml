@@ -1,0 +1,14 @@
+---
+- name: Converge 8.2
+  hosts: all
+  vars:
+    percona_mysql_version: '8.2'
+    percona_mysql_root_password: SOMELONGTESTPASSWORD
+    percona_mysql_additional_packages:
+    - percona-toolkit
+    - percona-xtrabackup-82
+  tasks:
+  - name: "Include andrelohmann.percona_mysql"
+    include_role:
+      name: "andrelohmann.percona_mysql"
+...
