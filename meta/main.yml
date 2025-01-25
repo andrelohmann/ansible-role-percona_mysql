@@ -13,7 +13,7 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - jammy
-    - focal
+    - noble
 
   galaxy_tags:
   - mysql
