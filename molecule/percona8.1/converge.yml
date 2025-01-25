@@ -1,6 +1,8 @@
 ---
 - name: Converge 8.1
   hosts: all
+  become: true
+  become_method: sudo
   vars:
     percona_mysql_version: '8.1'
     percona_mysql_root_password: SOMELONGTESTPASSWORD
