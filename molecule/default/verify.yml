@@ -6,7 +6,7 @@
   gather_facts: false
   tasks:
 
-  - name: mysql restart
+  - name: Mysql restart
     ansible.builtin.systemd_service:
       name: mysql
       state: restarted
@@ -43,6 +43,7 @@
     args:
       executable: /bin/bash
     register: mysql_version_status
+    changed_when: false
 
   - name: Dump mysql_version_status
     ansible.builtin.debug:
