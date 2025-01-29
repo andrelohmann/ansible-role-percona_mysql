@@ -29,6 +29,7 @@
     args:
       executable: /bin/bash
     register: my_cnf_status
+    changed_when: false
 
   - name: Dump my_cnf_status
     ansible.builtin.debug:
