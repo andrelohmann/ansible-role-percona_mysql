@@ -3,6 +3,6 @@
 roles: []
 
 collections:
-- community.mysql
+- name: community.mysql
 
 ...

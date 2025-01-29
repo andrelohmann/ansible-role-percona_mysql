@@ -9,7 +9,7 @@ on:
     - "hotfix/*"
     - "release/*"
     - "major/*"
-    - master
+    - main
 
 jobs:
   call-workflow:

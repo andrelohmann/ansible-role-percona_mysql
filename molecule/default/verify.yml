@@ -7,12 +7,12 @@
   tasks:
 
   - name: mysql restart
-    systemd:
+    ansible.builtin.systemd_service:
       name: mysql
       state: restarted
 
   - name: Get Service Status
-    ansible.builtin.systemd:
+    ansible.builtin.systemd_service:
       name: "mysql.service"
     register: mysql_service_status
 
